@@ -11,7 +11,7 @@ services:
     volumes:
       - minio-vol:/data
     env_file:
-      - ./utils/.env
+      - .env
     networks:
       - minio_net
 networks:
