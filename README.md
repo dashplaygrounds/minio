@@ -102,3 +102,4 @@ In this section, I will go through the basic steps of managing minio server usin
 - https://github.com/minio/mc/blob/master/docs/minio-client-complete-guide.md
 - https://min.io/docs/minio/linux/administration/identity-access-management/minio-user-management.html
 - https://aliartiza75.medium.com/minio-server-management-using-minio-client-mc-70c8a7ce38
+- Check Minio docker tags on quay.io: https://quay.io/repository/minio/minio?tab=tags
