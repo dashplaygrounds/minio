@@ -58,19 +58,28 @@ mc mb $ALIAS/bucket1
 
 mc admin policy create $ALIAS getonly getonly.json
 
-NEWUSER=myuser
-NEWPW=mypassword
-ACCESSKEY=lOaKzDZMgF2ts41uCGEY
-SECRETKEY=95xbaKjvYUzguKFTprsfobbxhwbeSMeUFH6nfqaJ
+NEWUSER=
+NEWPW=
+# ACCESSKEY=
+# SECRETKEY=
 mc admin user add $ALIAS $NEWUSER $NEWPW
-mc admin policy attach $USER readwrite --user=$USERNAME
+# mc admin user add $ALIAS $ACCESSKEY $SECRETKEY
+<!-- Added user `myuser` successfully. -->
+mc admin policy attach $ALIAS readwrite --user=$NEWUSER
+<!-- 
+Attached Policies: [readwrite]
+To User: myuser 
+-->
 
 mc cp minio.txt $ALIAS/bucket1/
-# ...admin/projects/minio/minio.txt: 12 B / 12 B ━━━━━━━━━━━━━━━━━━━━
+# ...minio.txt: 12 B / 12 B ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 58 B/s 0s
 mc ls $ALIAS/bucket1
 # [2023-10-02 09:53:22 UTC]    12B minio.txt
 ls /minio/data
-mc cat bucket1/minio.txt
+# buckets
+ls /minio/data/bucket1/
+# minio.txt
+mc cat $ALIAS/bucket1/minio.txt
 # hello minio
 
 
@@ -86,6 +95,7 @@ In this section, I will go through the basic steps of managing minio server usin
 4. Create a new bucket.
 5. Copy a file from minio client container inside a minio bucket.
 6. Sync minio server objects on the local system.
+
 
 ## Minio guide
 - https://min.io/docs/minio/container/
