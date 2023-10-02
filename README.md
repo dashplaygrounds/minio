@@ -15,7 +15,8 @@ sudo mv mc /usr/local/bin/mc
 
 mc --version && mc --help
 rm -rf $HOME/.mc && ls -a ~
-mc alias set local http://minio2023.dashmark.me:9998 $MINIO_ROOT_USER $MINIO_ROOT_PASSWORD
+ALIAS=local
+mc alias set $ALIAS http://minio2023.dashmark.me:9998 $MINIO_ROOT_USER $MINIO_ROOT_PASSWORD
 # Added `local` successfully.
 
 mc admin info local
@@ -33,14 +34,61 @@ Pools:
 1 drive online, 0 drives offline 
 -->
 
-mc mb
 mc ls
+echo "hello minio" >> minio.txt
+mc mb $ALIAS/bucket1
+# Bucket created successfully `local/bucket1`.
 
-mc admin user add $ALIAS $ACCESSKEY $SECRETKEY
-mc admin policy attach $ALIAS readwrite --user=$USERNAME
+# getonly.json
+{
+  "Version": "2012-10-17",
+  "Statement": [
+	{
+	  "Action": [
+		"s3:GetObject"
+	  ],
+	  "Effect": "Allow",
+	  "Resource": [
+		"arn:aws:s3:::my-bucketname/*"
+	  ],
+	  "Sid": ""
+	}
+  ]
+}
+
+mc admin policy create $ALIAS getonly getonly.json
+
+NEWUSER=myuser
+NEWPW=mypassword
+ACCESSKEY=lOaKzDZMgF2ts41uCGEY
+SECRETKEY=95xbaKjvYUzguKFTprsfobbxhwbeSMeUFH6nfqaJ
+mc admin user add $ALIAS $NEWUSER $NEWPW
+mc admin policy attach $USER readwrite --user=$USERNAME
+
+mc cp minio.txt $ALIAS/bucket1/
+# ...admin/projects/minio/minio.txt: 12 B / 12 B ━━━━━━━━━━━━━━━━━━━━
+mc ls $ALIAS/bucket1
+# [2023-10-02 09:53:22 UTC]    12B minio.txt
+ls /minio/data
+mc cat bucket1/minio.txt
+# hello minio
+
+
 ```
+
+## Minio client usage
+Minio Client Usage
+In this section, I will go through the basic steps of managing minio server using its client.
+
+1. Start minio server and provide the desired minio access and secret key.
+2. Start minio client.
+3. Connect the minio client (mc) with minio server.
+4. Create a new bucket.
+5. Copy a file from minio client container inside a minio bucket.
+6. Sync minio server objects on the local system.
 
 ## Minio guide
 - https://min.io/docs/minio/container/
 - https://github.com/minio/mc/blob/master/docs/minio-client-complete-guide.md
 - https://min.io/docs/minio/linux/administration/identity-access-management/minio-user-management.html
+- https://aliartiza75.medium.com/minio-server-management-using-minio-client-mc-70c8a7ce38
