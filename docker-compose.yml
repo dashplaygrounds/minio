@@ -1,0 +1,26 @@
+version: '3.9'
+services:
+  minio:
+    image: quay.io/minio/minio
+    container_name: minio
+    command: server /data --console-address ":9090"
+    restart: always
+    ports:
+      - 9000:9000
+      - 9999:9090
+    volumes:
+      - minio-vol:/data
+    env_file:
+      - ./utils/.env
+    networks:
+      - minio_net
+networks:
+  minio_net:
+    external: true
+volumes:
+  minio-vol:
+    driver: local
+    driver_opts:
+      type: none
+      device: /minio/data
+      o: bind
