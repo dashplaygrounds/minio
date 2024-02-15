@@ -1,11 +1,14 @@
 # minio
 
 ## Pre-requisites
-1. Enable in DO firewall ports `9998-9999`
-2. Test: `curl http://minio2023.dashmark.me:9999`
+1. Enable in server firewall ports `9998-9999`
+2. Install docker on debian
 
 ## Install server
 `source deploy.sh`
+
+## Test: 
+`curl http://0.0.0.0:9999`
 
 ## Install minio-client (mc)
 ```
@@ -16,12 +19,12 @@ sudo mv mc /usr/local/bin/mc
 mc --version && mc --help
 rm -rf $HOME/.mc && ls -a ~
 ALIAS=local
-mc alias set $ALIAS http://minio2023.dashmark.me:9998 $MINIO_ROOT_USER $MINIO_ROOT_PASSWORD
+mc alias set $ALIAS http://0.0.0.0:9998 $MINIO_ROOT_USER $MINIO_ROOT_PASSWORD
 # Added `local` successfully.
 
 mc admin info local
 <!-- 
-●  minio2023.dashmark.me:9998
+●  0.0.0.0:9998
    Uptime: 31 seconds
    Version: 2023-09-30T07:02:29Z
    Network: 1/1 OK
@@ -36,8 +39,8 @@ Pools:
 
 mc ls
 echo "hello minio" >> minio.txt
-mc mb $ALIAS/bucket1
-# Bucket created successfully `local/bucket1`.
+mc mb $ALIAS/go-bag
+# Bucket created successfully `local/go-bag`.
 
 # getonly.json
 {
@@ -49,7 +52,7 @@ mc mb $ALIAS/bucket1
 	  ],
 	  "Effect": "Allow",
 	  "Resource": [
-		"arn:aws:s3:::my-bucketname/*"
+		"arn:aws:s3:::go-bag/*"
 	  ],
 	  "Sid": ""
 	}
@@ -58,12 +61,14 @@ mc mb $ALIAS/bucket1
 
 mc admin policy create $ALIAS getonly getonly.json
 
+mc anonymous set --recursive download local/go-bag
+
 NEWUSER=
 NEWPW=
-# ACCESSKEY=
-# SECRETKEY=
+// ACCESSKEY=
+// SECRETKEY=
 mc admin user add $ALIAS $NEWUSER $NEWPW
-# mc admin user add $ALIAS $ACCESSKEY $SECRETKEY
+// mc admin user add $ALIAS $ACCESSKEY $SECRETKEY
 <!-- Added user `myuser` successfully. -->
 mc admin policy attach $ALIAS readwrite --user=$NEWUSER
 <!-- 
@@ -71,16 +76,16 @@ Attached Policies: [readwrite]
 To User: myuser 
 -->
 
-mc cp minio.txt $ALIAS/bucket1/
-# ...minio.txt: 12 B / 12 B ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 58 B/s 0s
-mc ls $ALIAS/bucket1
-# [2023-10-02 09:53:22 UTC]    12B minio.txt
+mc cp minio.txt $ALIAS/go-bag/
+// ...minio.txt: 12 B / 12 B ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 58 B/s 0s
+mc ls $ALIAS/go-bag
+// [2023-10-02 09:53:22 UTC]    12B minio.txt
 ls /minio/data
-# buckets
-ls /minio/data/bucket1/
-# minio.txt
-mc cat $ALIAS/bucket1/minio.txt
-# hello minio
+// buckets
+ls /minio/data/go-bag/
+// minio.txt
+mc cat $ALIAS/go-bag/minio.txt
+// hello minio
 
 
 ```
@@ -102,4 +107,5 @@ In this section, I will go through the basic steps of managing minio server usin
 - https://github.com/minio/mc/blob/master/docs/minio-client-complete-guide.md
 - https://min.io/docs/minio/linux/administration/identity-access-management/minio-user-management.html
 - https://aliartiza75.medium.com/minio-server-management-using-minio-client-mc-70c8a7ce38
+- https://stackoverflow.com/questions/73095191/minio-presignedputobject-generated-url-only-valid-for-days-how-to-make-it-publi
 - Check Minio docker tags on quay.io: https://quay.io/repository/minio/minio?tab=tags

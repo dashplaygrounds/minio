@@ -7,7 +7,7 @@
             ],
             "Effect": "Allow",
             "Resource": [
-                "arn:aws:s3:::my-bucketname/*"
+                "arn:aws:s3:::go-bag/*"
             ],
             "Sid": ""
         }
