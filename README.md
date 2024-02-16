@@ -67,6 +67,12 @@ mc anonymous links local/go-bag --recursive
 // http://0.0.0.0:9998/go-bag/forest.jpg
 // http://0.0.0.0:9998/go-bag/minio.txt
 
+// http://192.168.1.240:9998/go-bag/forest.jpg
+// http://192.168.1.240:9998/go-bag/minio.txt
+
+// curl http://192.168.1.240:9998/go-bag/forest.jpg
+// curl http://192.168.1.240:9998/go-bag/minio.txt
+
 NEWUSER=marksilverio
 NEWPW=marksilveriopw
 // ACCESSKEY=
