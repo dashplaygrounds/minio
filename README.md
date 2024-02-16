@@ -61,10 +61,12 @@ mc mb $ALIAS/go-bag
 
 mc admin policy create $ALIAS getonly getonly.json
 
-mc anonymous set --recursive download local/go-bag
+mc anonymous set --recursive download local/go-bag/
 
-NEWUSER=
-NEWPW=
+mc anonymous links local/go-bag --recursive
+
+NEWUSER=marksilverio
+NEWPW=marksilveriopw
 // ACCESSKEY=
 // SECRETKEY=
 mc admin user add $ALIAS $NEWUSER $NEWPW
@@ -73,7 +75,7 @@ mc admin user add $ALIAS $NEWUSER $NEWPW
 mc admin policy attach $ALIAS readwrite --user=$NEWUSER
 <!-- 
 Attached Policies: [readwrite]
-To User: myuser 
+To User: marksilverio
 -->
 
 mc cp minio.txt $ALIAS/go-bag/
@@ -107,5 +109,7 @@ In this section, I will go through the basic steps of managing minio server usin
 - https://github.com/minio/mc/blob/master/docs/minio-client-complete-guide.md
 - https://min.io/docs/minio/linux/administration/identity-access-management/minio-user-management.html
 - https://aliartiza75.medium.com/minio-server-management-using-minio-client-mc-70c8a7ce38
+- https://github.com/minio/minio-js/issues/588
 - https://stackoverflow.com/questions/73095191/minio-presignedputobject-generated-url-only-valid-for-days-how-to-make-it-publi
+- https://stackoverflow.com/questions/74656068/minio-how-to-get-right-link-to-display-image-on-html
 - Check Minio docker tags on quay.io: https://quay.io/repository/minio/minio?tab=tags
