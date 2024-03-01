@@ -7,7 +7,8 @@
             ],
             "Effect": "Allow",
             "Resource": [
-                "arn:aws:s3:::go-bag/*"
+                "arn:aws:s3:::go-bag/*",
+                "arn:aws:s3:::sfecli-bucket/*"
             ],
             "Sid": ""
         }

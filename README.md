@@ -18,6 +18,7 @@ sudo mv mc /usr/local/bin/mc
 
 mc --version && mc --help
 rm -rf $HOME/.mc && ls -a ~
+source utils/.env
 ALIAS=local
 mc alias set $ALIAS http://0.0.0.0:9998 $MINIO_ROOT_USER $MINIO_ROOT_PASSWORD
 # Added `local` successfully.
@@ -52,7 +53,8 @@ mc mb $ALIAS/go-bag
 	  ],
 	  "Effect": "Allow",
 	  "Resource": [
-		"arn:aws:s3:::go-bag/*"
+		"arn:aws:s3:::go-bag/*",
+		"arn:aws:s3:::sfecli-bucket/*"
 	  ],
 	  "Sid": ""
 	}
@@ -62,16 +64,22 @@ mc mb $ALIAS/go-bag
 mc admin policy create $ALIAS getonly getonly.json
 
 mc anonymous set --recursive download local/go-bag/
+mc anonymous set --recursive download local/sfecli-bucket/
 
 mc anonymous links local/go-bag --recursive
-// http://0.0.0.0:9998/go-bag/forest.jpg
-// http://0.0.0.0:9998/go-bag/minio.txt
+mc anonymous links local/sfecli-bucket --recursive
 
-// http://192.168.1.240:9998/go-bag/forest.jpg
-// http://192.168.1.240:9998/go-bag/minio.txt
+kubeadmin@db-center:~/projects/minio$ mc anonymous links local/go-bag --recursive
+http://0.0.0.0:9998/go-bag/forest.jpg
+http://0.0.0.0:9998/go-bag/married-life-piano.mp4
+http://0.0.0.0:9998/go-bag/minio.txt
+kubeadmin@db-center:~/projects/minio$ mc anonymous links local/sfecli-bucket --recursive
+http://0.0.0.0:9998/sfecli-bucket/hello.txt
+
 
 // curl http://192.168.1.240:9998/go-bag/forest.jpg
 // curl http://192.168.1.240:9998/go-bag/minio.txt
+// curl http://192.168.1.240:9998/sfecli-bucket/hello.txt
 
 NEWUSER=marksilverio
 NEWPW=marksilveriopw
