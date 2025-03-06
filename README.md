@@ -1,14 +1,14 @@
 # minio
 
 ## Pre-requisites
-1. Enable in server firewall ports `9998-9999`
+1. Enable in server firewall ports `9997-9998`
 2. Install docker on debian
 
 ## Install server
 `source deploy.sh`
 
 ## Test: 
-`curl http://0.0.0.0:9999`
+`curl http://0.0.0.0:9997`
 
 ## Install minio-client (mc)
 ```
